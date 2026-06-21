@@ -1,8 +1,8 @@
 
 var PHP = (() => {
   // import.meta.url
-  // var import_meta_url = 'https://cdn.jsdelivr.net/npm/php-wasm@0.0.8/';
-  var import_meta_url = 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/files/php-wasm%400.0.8/';
+  var import_meta_url = 'https://cdn.jsdelivr.net/npm/php-wasm@0.0.8/';
+  // var import_meta_url = 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/files/php-wasm@0.0.8/';
   var _scriptDir = import_meta_url;
 
   return (

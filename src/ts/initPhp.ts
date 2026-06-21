@@ -23,9 +23,11 @@ export async function importPhp() {
     php = new PhpWebClass({
         files: [
             {
-                name: 'php-source.zip',
-                parent: '/preload/',
-                url: 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/src/php/php.zip'
+                name: 'tsconfig.json',
+                // name: 'php-source.zip',
+                parent: '/',
+                // url: 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/src/php/php.zip'
+                url: 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/tsconfig.json'
             }
         ]
     });
