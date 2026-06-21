@@ -9,8 +9,7 @@ import { PhpWeb as PhpWebClass } from "../../files/php-wasm@0.0.8/PhpWeb.mjs";
 import {
     clickTabCommonHandle, // пример обработчика
 } from "./handleFromFrontToPhp";
-// import { loadPhpSources } from "./loader_php" with { type: "macro" };
-import app_php_source from "./../php/app.php" with { type: "text" };
+// import app_php_source from "./../php/app.php" with { type: "text" };
 
 // 
 
@@ -26,7 +25,7 @@ export async function importPhp() {
             {
                 name: 'php-source.zip',
                 parent: '/preload/',
-                url: 'https://unpkg.com/php-wasm-intl/icudt72l.dat'
+                url: 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/src/php/php.zip'
             }
         ]
     });
@@ -59,14 +58,7 @@ export function appInit() {
     //
     // ------------------------------------------------------------------
 
-    php.run(app_php_source)
-        .then(() => {
-            console.log("[php-app] load php sources done");
-
-            // App\Init
-            return php.exec(`(new \\App\\Init)->__invoke()`);
-            // php.refresh();
-        })
+    php.exec(`(new \\App\\Init)->__invoke()`)
         .then((value) => {
             if (getObjWindowPhpApp().data_bridge.get("php-init") !== true) {
                 return;
