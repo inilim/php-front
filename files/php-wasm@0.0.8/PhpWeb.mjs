@@ -12,11 +12,11 @@ export class PhpWeb extends PhpBase {
                 const sync = !php.persist
                     ? Promise.resolve()
                     : new Promise((accept) =>
-                          php.FS.syncfs(true, (err) => {
-                              if (err) console.warn(err);
-                              accept();
-                          }),
-                      );
+                        php.FS.syncfs(true, (err) => {
+                            if (err) console.warn(err);
+                            accept();
+                        }),
+                    );
 
                 const run = sync.then(() => super.run(phpCode));
 

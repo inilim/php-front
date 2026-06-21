@@ -58,7 +58,9 @@ export function appInit() {
     //
     // ------------------------------------------------------------------
 
-    php.exec(`(new \\App\\Init)->__invoke()`)
+    return;
+    // php.exec(`(new \\App\\Init)->__invoke()`)
+    php.exec(`implode(PHP_EOL, scandir(__DIR__))`)
         .then((value) => {
             if (getObjWindowPhpApp().data_bridge.get("php-init") !== true) {
                 return;
