@@ -1,0 +1,12 @@
+{
+    "require": {
+        "inilim/php-js-stubs": "dev-main"
+    },
+    "require-dev": {
+        "symfony/finder": "^7.4",
+        "classpreloader/classpreloader": "^4.3",
+        "classpreloader/console": "^3.3",
+        "inilim/php-code-minifier": "dev-main",
+        "symfony/process": "^7.4"
+    }
+}

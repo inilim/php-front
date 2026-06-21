@@ -1,0 +1,3 @@
+{
+    "intelephense.files.exclude": ["**/src/php/app.php"]
+}
