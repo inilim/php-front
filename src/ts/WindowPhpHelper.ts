@@ -1,4 +1,3 @@
-import pako from "pako";
 import { getObjPhp } from "./initPhp";
 import { getObjWindowPhpApp } from "./WindowPhpApp";
 
@@ -43,53 +42,6 @@ export class WindowPhpHelper {
 
     ["querySelectorAll"](selector: string): NodeListOf<Element> {
         return document.querySelectorAll(selector);
-    }
-
-    ["compress"](value: string): string | null {
-        if (!value || value.length === 0) {
-            return "";
-        }
-
-        try {
-            // Конвертируем строку в Uint8Array
-            const uint8Array = new TextEncoder().encode(value);
-
-            // Сжимаем используя deflate
-            const compressed = pako.deflate(uint8Array);
-
-            // Конвертируем в base64 для хранения в localStorage более эффективным способом
-            let binary = "";
-            const len = compressed.byteLength;
-            for (let i = 0; i < len; i++) {
-                binary += String.fromCharCode(compressed[i]);
-            }
-
-            return btoa(binary);
-        } catch (error: unknown) {
-            console.error(error);
-        }
-        return null;
-    }
-
-    ["decompress"](value: string): string | null {
-        if (!value || value.length === 0) {
-            return "";
-        }
-
-        try {
-            // Декодируем из base64
-            const binaryString = atob(value);
-            const uint8Array = new Uint8Array(binaryString.length);
-            for (let i = 0; i < binaryString.length; i++) {
-                uint8Array[i] = binaryString.charCodeAt(i);
-            }
-            // Распаковываем используя inflate
-            return pako.inflate(uint8Array, { to: "string" });
-        } catch (error: unknown) {
-            console.error(error);
-        }
-
-        return null;
     }
 
     ["typeof"](value: any): string {
