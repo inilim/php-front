@@ -1,5 +1,7 @@
 
 var PHP = (() => {
+
+  // TODO хотелось бы wasm вместе с bindle собирать
   // import.meta.url
   var import_meta_url = 'https://cdn.jsdelivr.net/npm/php-wasm@0.0.8/';
   // TODO почемуто если брать ресурс из github то он грузится два раза.
