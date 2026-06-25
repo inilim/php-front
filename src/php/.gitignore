@@ -1,15 +1,6 @@
 # папки
-/node_modules
-/public
-/src/php/vendor
-/src/php-dev/vendor
 
-# форматы
-/**/*.txt
 
 # файл
-/bun.lock
-/.env
-/src/php/composer.lock
-/src/php/app.php
-/test.php
+/php.zip
+/php.base64
