@@ -40,7 +40,8 @@ final class Init
         // Действия после проверок:
 
         // TODO
-        \App\Example\AlertExample::invoke('Привет');
+        // \App\Example\AlertExample::invoke('Привет');
+        \App\Example\ElBodyExample::invoke();
 
         return;
 

@@ -1,6 +1,7 @@
 {
     "require": {
-        "inilim/php-js-stubs": "dev-main"
+        "inilim/php-js-stubs": "dev-main",
+        "inilim/tools": "^0.0.31052026"
     },
     "require-dev": {
         "symfony/finder": "^7.4",

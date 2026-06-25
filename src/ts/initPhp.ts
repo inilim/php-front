@@ -61,23 +61,6 @@ export function phpExecWithArg(callback: ((keyMap: string) => void), arg: any) {
     });
 }
 
-// function loadZipAsBase64(url: string) {
-//     return fetch(url)
-//         .then(response => {
-//             if (!response.ok) throw new Error('Ошибка загрузки');
-//             return response.arrayBuffer();
-//         })
-//         .then(arrayBuffer => {
-//             const uint8Array = new Uint8Array(arrayBuffer);
-//             let binaryString = '';
-//             for (let i = 0; i < uint8Array.length; i++) {
-//                 binaryString += String.fromCharCode(uint8Array[i]);
-//             }
-//             return btoa(binaryString);
-//         });
-// }
-
-
 // Так мы сразу внедряем файлы php внутрь бандла
 import zipBase64 from './../php/php.base64' with { type: "text" };
 
