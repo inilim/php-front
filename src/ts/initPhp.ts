@@ -66,25 +66,22 @@ export function appInit() {
     loadZipAsBase64('https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/src/php/php.zip')
         .then(base64 => {
             window.___tmp_php_zip_source = base64;
+            // INFO у методо run ограниченное вставка кода, но можно через js (window) пробросить ресурсы.
             return php.run(`<?php
-
-                use App\\Init;
-                use Vrzno;
-                use ZipArchive;
 
                 date_default_timezone_set('UTC');
                 error_reporting(E_ALL);
                 ini_set('memory_limit', '5m');
 
-                function window(): Vrzno
+                function window(): \\Vrzno
                 {
                     static $obj = null;
-                    return $obj ??= new Vrzno;
+                    return $obj ??= new \\Vrzno;
                 }
 
                 $status = false;
                 (static function (bool &$status) {
-                    $source = window()->__php_zip_source ?? '';
+                    $source = window()->___tmp_php_zip_source ?? '';
                     if ($source === '') {
                         window()->console->error('err zip');
                         return;
@@ -94,7 +91,7 @@ export function appInit() {
                     $zipFile = './source.zip';
                     file_put_contents($zipFile, $source);
                     $source = null;
-                    $zip = new ZipArchive;
+                    $zip = new \\ZipArchive;
 
                     if (false === $zip->open($zipFile)) {
                         window()->console->error('err zip');
@@ -117,10 +114,11 @@ export function appInit() {
                 if ($status) {
                     require_once __DIR__ . '/src/vendor/autoload.php';
                 }
+                var_dump(is_file(__DIR__ . '/src/vendor/autoload.php'));
 
                 unset($status);
 
-                (new Init)->__invoke();
+                (new \\App\\Init)->__invoke();
             `)
         })
         .then((value) => {

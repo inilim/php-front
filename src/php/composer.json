@@ -1,4 +1,12 @@
 {
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "files": [
+            "functions.php"
+        ]
+    },
     "require": {
         "inilim/tools": "^0.0.31052026"
     },

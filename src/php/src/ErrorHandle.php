@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\Tool\Obj;
-use App\Tool\Time;
-use App\Tool\Other;
+use Inilim\Tool\Obj;
+use Inilim\Tool\Other;
+use Inilim\Tool\Time;
 
 final class ErrorHandle
 {
