@@ -30,15 +30,17 @@ final class Init
         \date_default_timezone_set('UTC');
         \ini_set('display_errors', 1);
         \error_reporting(\E_ALL);
+        ini_set('memory_limit', '5m');
         (new ErrorHandle)->register();
 
-        \console()->log('УРАААА');
         // Проверки:
-        // $this->checkDeps();
+        $this->checkDeps();
         // $this->checkEl();
 
         // Действия после проверок:
 
+        // TODO
+        \App\Example\AlertExample::invoke('Привет');
 
         return;
 

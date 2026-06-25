@@ -42,7 +42,7 @@ final class ErrorHandle
      * @param string $message
      * @param string $file
      * @param integer $line
-     * @return boolean
+     * @return bool
      */
     protected function handleError($level_err, $message, $file, $line)
     {

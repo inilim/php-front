@@ -1,13 +1,13 @@
-import { getPhp, phpExecWithArg } from "./initPhp";
+import { getObjPhp, phpExecWithArg } from "./initPhp";
 
 type PromiseAny = Promise<any>;
 
-// @INFO тут функции которые из ФРОНТА вызывают PHP логику
+// @INFO тут функции которые из ФРОНТА по событиям вызывают PHP логику
 
 export function clickTabCommonHandle(event: Event): void {
     phpExecWithArg((keyMap) => {
         // App\EventHandle\ClickTabCommonHandle
-        return getPhp().exec(
+        return getObjPhp().exec(
             `\\App\\EventHandle\\ClickTabCommonHandle::invoke("${keyMap}")`,
         );
     }, event);
@@ -16,7 +16,7 @@ export function clickTabCommonHandle(event: Event): void {
 export function clickBtnCommonHandle(event: Event): void {
     phpExecWithArg((keyMap) => {
         // App\EventHandle\ClickTabCommonHandle
-        return getPhp().exec(
+        return getObjPhp().exec(
             `\\App\\EventHandle\\ClickBtnCommonHandle::invoke("${keyMap}")`,
         );
     }, event);

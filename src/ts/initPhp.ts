@@ -9,11 +9,25 @@ import { PhpWeb as PhpWebClass } from "../../files/php-wasm@0.0.8/PhpWeb.mjs";
 import {
     clickTabCommonHandle, // пример обработчика
 } from "./handleFromFrontToPhp";
-// import app_php_source from "./../php/app.php" with { type: "text" };
-
-// 
 
 let php: PhpWebStub | null = null;
+
+
+
+
+
+function output(event: CustomEvent) {
+    console.log('[php-app] output event.detail', event.detail);
+}
+
+function error(event: CustomEvent) {
+    console.log('[php-app] error event.detail', event.detail);
+}
+
+function ready(event: CustomEvent) {
+    console.log("[php-app] import php done");
+    appInit();
+}
 
 export async function importPhp() {
 
@@ -31,6 +45,10 @@ export async function importPhp() {
 export function getObjPhp(): PhpWebStub {
     return php as PhpWebStub;
 }
+
+
+
+
 
 /**
  * Вызываем коллбек с передачей аргумента в контекст php
@@ -68,10 +86,6 @@ export function appInit() {
             window.___tmp_php_zip_source = base64;
             // INFO у методо run ограниченное вставка кода, но можно через js (window) пробросить ресурсы.
             return php.run(`<?php
-
-                date_default_timezone_set('UTC');
-                error_reporting(E_ALL);
-                ini_set('memory_limit', '5m');
 
                 function window(): \\Vrzno
                 {
@@ -113,21 +127,18 @@ export function appInit() {
 
                 if ($status) {
                     require_once __DIR__ . '/src/vendor/autoload.php';
+                    (new \\App\\Init)->__invoke();
                 }
-                var_dump(is_file(__DIR__ . '/src/vendor/autoload.php'));
 
                 unset($status);
-
-                (new \\App\\Init)->__invoke();
             `)
         })
         .then((value) => {
 
             window.___tmp_php_zip_source = undefined;
             delete window.___tmp_php_zip_source;
-            console.log("[php-app] done");
+            // console.log("[php-app] done");
 
-            return;
             if (getObjWindowPhpApp().data_bridge.get("php-init") !== true) {
                 return;
             }

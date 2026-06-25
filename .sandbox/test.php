@@ -1,9 +1,5 @@
 <?php
 
-date_default_timezone_set('UTC');
-error_reporting(E_ALL);
-ini_set('memory_limit', '5m');
-
 function window(): \Vrzno
 {
     static $obj = null;
@@ -44,9 +40,7 @@ $status = false;
 
 if ($status) {
     require_once __DIR__ . '/src/vendor/autoload.php';
-    var_dump(is_file(__DIR__ . '/src/vendor/autoload.php'));
+    (new \App\Init)->__invoke();
 }
 
 unset($status);
-
-(new \App\Init)->__invoke();

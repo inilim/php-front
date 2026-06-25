@@ -14,7 +14,7 @@ export class WindowPhpApp {
     constructor() {
         // this["act"+"ion"] <-- build minify переименовывает свойства, поэтому делаем конкатенацию для сохранения
         this["act" + "ion"] = new WindowPhpActionService();
-        this["data" + "bridge"] = new DataBridge();
+        this["data_" + "bridge"] = new DataBridge();
         this["hel" + "per"] = new WindowPhpHelper();
     }
 }
