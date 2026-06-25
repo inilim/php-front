@@ -20,17 +20,7 @@ export async function importPhp() {
     // TODO wasm берем из CDN !!!!
     // const { PhpWeb as PhpWebClass } = await import('https://cdn.jsdelivr.net/npm/php-wasm@0.0.8/PhpWeb.mjs');
     // const { PhpWeb as PhpWebClass } = await import('https://cdn.jsdelivr.net/npm/php-wasm@0.0.9-alpha-32/PhpWeb.mjs');
-    php = new PhpWebClass({
-        files: [
-            {
-                name: 'tsconfig.json',
-                // name: 'php-source.zip',
-                parent: '/',
-                // url: 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/src/php/php.zip'
-                url: 'https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/tsconfig.json'
-            }
-        ]
-    });
+    php = new PhpWebClass();
     if (php) {
         php.addEventListener('output', output);
         php.addEventListener('error', error);
@@ -53,6 +43,22 @@ export function phpExecWithArg(callback: ((keyMap: string) => void), arg: any) {
     });
 }
 
+function loadZipAsBase64(url: string) {
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) throw new Error('Ошибка загрузки');
+            return response.arrayBuffer();
+        })
+        .then(arrayBuffer => {
+            const uint8Array = new Uint8Array(arrayBuffer);
+            let binaryString = '';
+            for (let i = 0; i < uint8Array.length; i++) {
+                binaryString += String.fromCharCode(uint8Array[i]);
+            }
+            return btoa(binaryString);
+        });
+}
+
 export function appInit() {
     const php = getObjPhp();
 
@@ -60,17 +66,46 @@ export function appInit() {
     //
     // ------------------------------------------------------------------
 
-    return;
+    // return;
     // php.exec(`(new \\App\\Init)->__invoke()`)
-    php.exec(`implode(PHP_EOL, scandir(__DIR__))`)
+    loadZipAsBase64('https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/src/php/php.zip')
+        .then(base64 => php.run(`<?php
+
+            $source = '${base64}';
+            $source = \\base64_decode($source, true);
+            $zipFile = './source.zip';
+            \\file_put_contents($zipFile, $source);
+            unset($source);
+            $zip = new \\ZipArchive;
+
+            if (false === $zip->open($zipFile)) {
+                echo 'err zip';
+            }
+
+            if (false === \\mkdir('./src')) {
+                echo 'err create dir';
+            }
+
+            $zip->extractTo('./src');
+
+            $zip->close();
+
+            \\unlink($zipFile);
+
+            print_r(\\scandir(__DIR__));
+            print_r(\\scandir(__DIR__ . '/src'));`))
         .then((value) => {
+            console.log("[php-app] done");
+
+            return;
             if (getObjWindowPhpApp().data_bridge.get("php-init") !== true) {
                 return;
             }
 
             console.log("[php-app] \\App\\Init->__invoke() done");
             setFrontHandlers();
-        });
+        })
+        .catch(err => console.error('[php-app]', err));
 }
 
 function setFrontHandlers(): void {
