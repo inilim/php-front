@@ -56,10 +56,12 @@ function getVrznoType(object $obj): string
     return $obj::class;
 }
 
-function window(): \Vrzno
-{
-    static $obj = null;
-    return $obj ??= new \Vrzno;
+if (false === \function_exists('window')) {
+    function window(): \Vrzno
+    {
+        static $obj = null;
+        return $obj ??= new \Vrzno;
+    }
 }
 
 /**

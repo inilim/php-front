@@ -62,39 +62,71 @@ function loadZipAsBase64(url: string) {
 export function appInit() {
     const php = getObjPhp();
 
-    // ------------------------------------------------------------------
-    //
-    // ------------------------------------------------------------------
-
-    // return;
     // php.exec(`(new \\App\\Init)->__invoke()`)
     loadZipAsBase64('https://raw.githubusercontent.com/inilim/php-front/refs/heads/master/src/php/php.zip')
-        .then(base64 => php.run(`<?php
+        .then(base64 => {
+            window.___tmp_php_zip_source = base64;
+            return php.run(`<?php
 
-            $source = '${base64}';
-            $source = \\base64_decode($source, true);
-            $zipFile = './source.zip';
-            \\file_put_contents($zipFile, $source);
-            unset($source);
-            $zip = new \\ZipArchive;
+                use App\\Init;
+                use Vrzno;
+                use ZipArchive;
 
-            if (false === $zip->open($zipFile)) {
-                echo 'err zip';
-            }
+                date_default_timezone_set('UTC');
+                error_reporting(E_ALL);
+                ini_set('memory_limit', '5m');
 
-            if (false === \\mkdir('./src')) {
-                echo 'err create dir';
-            }
+                function window(): Vrzno
+                {
+                    static $obj = null;
+                    return $obj ??= new Vrzno;
+                }
 
-            $zip->extractTo('./src');
+                $status = false;
+                (static function (bool &$status) {
+                    $source = window()->__php_zip_source ?? '';
+                    if ($source === '') {
+                        window()->console->error('err zip');
+                        return;
+                    }
 
-            $zip->close();
+                    $source = base64_decode($source, true);
+                    $zipFile = './source.zip';
+                    file_put_contents($zipFile, $source);
+                    $source = null;
+                    $zip = new ZipArchive;
 
-            \\unlink($zipFile);
+                    if (false === $zip->open($zipFile)) {
+                        window()->console->error('err zip');
+                        return;
+                    }
 
-            print_r(\\scandir(__DIR__));
-            print_r(\\scandir(__DIR__ . '/src'));`))
+                    if (false === mkdir('./src')) {
+                        window()->console->error('err create dir');
+                        return;
+                    }
+
+                    $zip->extractTo('./src');
+                    $zip->close();
+                    $zip = null;
+                    unlink($zipFile);
+
+                    $status = true;
+                })($status);
+
+                if ($status) {
+                    require_once __DIR__ . '/src/vendor/autoload.php';
+                }
+
+                unset($status);
+
+                (new Init)->__invoke();
+            `)
+        })
         .then((value) => {
+
+            window.___tmp_php_zip_source = undefined;
+            delete window.___tmp_php_zip_source;
             console.log("[php-app] done");
 
             return;

@@ -5,10 +5,6 @@ namespace App;
 use App\ErrorHandle;
 use App\InitException;
 use App\Enum\DataBridgeKeyEnum;
-use App\Action\SortBtnTabsAction;
-use App\Action\Once\CheckTabsFromLSAction;
-use App\Action\Once\RunTabLongPollingAction;
-use App\Action\Once\FirstSetContentFrameAction;
 
 final class Init
 {
@@ -36,7 +32,7 @@ final class Init
         \error_reporting(\E_ALL);
         (new ErrorHandle)->register();
 
-        \console()->log(\scandir(__DIR__));
+        \console()->log('УРАААА');
         // Проверки:
         // $this->checkDeps();
         // $this->checkEl();
