@@ -7,7 +7,7 @@ use Inilim\Tool\ID;
 final class CallbackRegistryService
 {
     /**
-     * @var array<int,\Closure(mixed,mixed,mixed,mixed,mixed):mixed>
+     * @var array<int,array{0:\Closure(mixed,mixed,mixed,mixed,mixed):mixed,1:bool}>
      */
     protected array $callbacks = [];
 
@@ -15,16 +15,43 @@ final class CallbackRegistryService
      * Сразу получаем JS callback
      * @return \PhpJsStub\Function_
      */
-    function getJsCallback(callable $callback, string|int|null $name = null): object
+    function getJsCallback(callable $callback, string|int|null $name = null, bool $once = true): object
     {
-        return \windowApp()->helper->createPhpInvoker($this->register($callback, $name));
+        return \windowApp()->helper->createPhpInvoker(
+            $once ? $this->registerOnce($callback, $name) : $this->register($callback, $name)
+        );
     }
 
     /**
-     * Тут регистрируем php функцию на стороне PHP
      * @param string|int|null $name Если требуется получать один и тотже идентификатор, можно придумать имя для callback
      */
     function register(callable $callback, string|int|null $name = null): int
+    {
+        [$id, $wrpCallback] = $this->_registry($callback, $name);
+        $this->callbacks[$id] = [
+            $wrpCallback,
+            false,
+        ];
+        return $id;
+    }
+
+    /**
+     * Однаразовая функция
+     */
+    function registerOnce(callable $callback, string|int|null $name = null): int
+    {
+        [$id, $wrpCallback] = $this->_registry($callback, $name);
+        $this->callbacks[$id] = [
+            $wrpCallback,
+            true,
+        ];
+        return $id;
+    }
+
+    /**
+     * @return array{0:int,1:\Closure}
+     */
+    protected function _registry(callable $callback, string|int|null $name = null): array
     {
         $id = $name ?? ID::uuidv4();
         $id = \crc32((string)$id);
@@ -44,8 +71,8 @@ final class CallbackRegistryService
                 throw $e;
             }
         };
-        $this->callbacks[$id] = $wrpCallback;
-        return $id;
+
+        return [$id, $wrpCallback];
     }
 
     /**
@@ -62,16 +89,27 @@ final class CallbackRegistryService
         return $this;
     }
 
-    function get(int $id): ?\Closure
+    function removeByName(string|int $name): self
+    {
+        return $this->remove(\crc32((string)$name));
+    }
+
+    /**
+     * @return array{0:\Closure,1:bool}|null
+     */
+    function get(int $id): ?array
     {
         return $this->callbacks[$id] ?? null;
     }
 
-    function pull(int $id): ?\Closure
+    /**
+     * @return array{0:\Closure,1:bool}|null
+     */
+    function pull(int $id): ?array
     {
-        $callback = $this->callbacks[$id] ?? null;
+        $array = $this->callbacks[$id] ?? null;
         unset($this->callbacks[$id]);
-        return $callback;
+        return $array;
     }
 
     function has(int $id): bool

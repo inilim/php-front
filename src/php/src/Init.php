@@ -27,6 +27,7 @@ final class Init
 
     protected function process(): void
     {
+        // https://github.com/cscott/idle-dom
         \date_default_timezone_set('UTC');
         \ini_set('display_errors', 1);
         \error_reporting(\E_ALL);
@@ -41,7 +42,10 @@ final class Init
 
         // TODO
         // \App\Example\AlertExample::invoke('Привет');
-        \App\Example\ElBodyExample::invoke();
+        // \App\Example\ElBodyExample::invoke();
+        // \App\Example\AddEventExample::invoke();
+        \App\Example\YoutubeHideOldVideosExample::invoke();
+        // \window()->alert('Привет');
 
         return;
 

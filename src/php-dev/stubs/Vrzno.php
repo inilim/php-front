@@ -6,10 +6,21 @@ use PhpJsStub\Promise;
 use PhpJsStub\Location;
 use PhpJsStub\Response;
 use PhpJsStub\Function_;
+use PhpJsStub\GlobalDocument;
 use PhpJsStub\LocalStorage;
 
+/**
+ * window
+ */
 final readonly class Vrzno
 {
+    // ------------------------------------------------------------------
+    // Custom
+    // ------------------------------------------------------------------
+
+    public \Stub\WindowPhpApp $__php_app;
+    public object $__php_debug;
+
     // ------------------------------------------------------------------
     // Native
     // ------------------------------------------------------------------
@@ -17,9 +28,12 @@ final readonly class Vrzno
     public LocalStorage $localStorage;
     public Console $console;
     public Location $location;
-    public \Stub\WindowPhpApp $__php_app;
-    // TODO
-    public object $document;
+    public GlobalDocument $document;
+
+    function setInterval(Function_ $callback, int $delay)
+    {
+        throw new \Error;
+    }
 
     /**
      */
@@ -30,10 +44,7 @@ final readonly class Vrzno
 
     /**
      */
-    function open(null|string|URL $url = null, ?string $target = null, ?string $windowFeatures = null): void
-    {
-        // 
-    }
+    function open(null|string|URL $url = null, ?string $target = null, ?string $windowFeatures = null): void {}
 
     /**
      * @return Promise<Response>
@@ -43,8 +54,5 @@ final readonly class Vrzno
         throw new \Error;
     }
 
-    function alert(mixed $value): void
-    {
-        // 
-    }
+    function alert(mixed $value): void {}
 }
